@@ -7,6 +7,7 @@ const CategoryList = props => {
     return categories.map(category => (
       <button
         type="button"
+        key={category}
         style={{
           color: "black",
           fontsize: "1em",

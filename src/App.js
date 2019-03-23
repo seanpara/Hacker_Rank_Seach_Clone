@@ -8,14 +8,19 @@ class App extends Component {
     articleIds: [],
     searchTerm: "",
     articleList: [],
-    filteredArticleList: []
+    filteredArticleList: [],
+    numFetchedArticles: 20
   };
 
   async componentDidMount() {
     this.fetchAricleIds("top");
+    window.addEventListener("scroll", this.handleScroll);
   }
 
   fetchAricleIds = async category => {
+    if (category !== this.state.category) {
+      this.setState({ numFetchedArticles: 20 });
+    }
     const articleIds = await fetch(
       `https://hacker-news.firebaseio.com/v0/${category.toLowerCase()}stories.json?print=pretty`
     ).then(r => r.json());
@@ -27,10 +32,14 @@ class App extends Component {
     const { articleIds } = this.state;
 
     const articleList = await Promise.all(
-      articleIds.slice(0, 10).map(id => this.fetchArticle(id))
+      articleIds
+        .slice(0, this.state.numFetchedArticles)
+        .map(id => this.fetchArticle(id))
     );
 
-    this.setState({ articleList });
+    this.setState({ articleList }, () =>
+      console.log(this.state.articleList, this.state.numFetchedArticles)
+    );
   };
 
   fetchArticle = async id => {
@@ -52,13 +61,25 @@ class App extends Component {
         .includes(this.state.searchTerm.toLowerCase())
     );
 
-    this.setState({ filteredArticleList });
+    this.setState({ filteredArticleList }, () => this.fetchAricleIds);
   };
 
   manageArticleDisplay = () => {
     return this.state.searchTerm
       ? this.state.filteredArticleList
       : this.state.articleList;
+  };
+
+  handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      this.setState(
+        state => ({
+          numFetchedArticles: (state.numFetchedArticles += 20)
+        }),
+        this.fetchArticleData
+      );
+      //show loading spinner and make fetch request to api
+    }
   };
 
   render() {
