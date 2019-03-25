@@ -20,12 +20,23 @@ class CommentList extends Component {
     ).then(r => r.json());
   };
 
+  cleanseCommentText = text => {
+    if (text) {
+      return text.replace(/<p>|&#x2F;|&gt;|&quot;|&#x27;/g, " ");
+    }
+  };
+
   renderComments = () => {
     //const commentArr = await fetchComents();
     return this.state.commentList.map(comment => (
-      <div id={comment.di}>
-        {comment.text}
-        By: {comment.by}
+      <div
+        key={comment.id}
+        style={{ border: "2px solid green", margin: "5px" }}
+      >
+        {this.cleanseCommentText(comment.text)}
+        <p style={{ border: "1px solid black", margin: "3px" }}>
+          By: {comment.by}
+        </p>
       </div>
     ));
   };

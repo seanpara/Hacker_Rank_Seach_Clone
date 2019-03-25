@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SearchBar from "./SearchBar";
 import ArticleList from "./ArticleList";
 import CategoryList from "./CategoryList";
+import SearchFilter from "./SearchFilter";
 
 class App extends Component {
   state = {
@@ -87,10 +88,7 @@ class App extends Component {
       <div>
         <SearchBar searchArticles={this.searchArticles} />
         <CategoryList fetchAricleIds={this.fetchAricleIds} />
-        <select>
-          <option>Stories</option>
-          <option>Comments</option>
-        </select>
+        <SearchFilter />
         <div>
           {this.state.articleList.length ? (
             <ArticleList articleList={this.manageArticleDisplay()} />
