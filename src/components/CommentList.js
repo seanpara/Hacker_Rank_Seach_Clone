@@ -4,6 +4,7 @@ class CommentList extends Component {
   state = {
     commentList: []
   };
+
   componentDidMount() {
     this.fetchComents();
   }

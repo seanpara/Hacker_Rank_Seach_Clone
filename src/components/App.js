@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+
+import ArticleContext from "../ArticleContext"
 import SearchBar from "./SearchBar";
 import ArticleList from "./ArticleList";
 import CategoryList from "./CategoryList";
@@ -25,7 +27,6 @@ class App extends Component {
     const articleIds = await fetch(
       `https://hacker-news.firebaseio.com/v0/${category.toLowerCase()}stories.json?print=pretty`
     ).then(r => r.json());
-    // console.log(articleIds);
     this.setState({ articleIds }, this.fetchArticleData);
   };
 
@@ -38,9 +39,7 @@ class App extends Component {
         .map(id => this.fetchArticle(id))
     );
 
-    this.setState({ articleList }, () =>
-      console.log(this.state.articleList, this.state.numFetchedArticles)
-    );
+    this.setState({ articleList });
   };
 
   fetchArticle = async id => {
@@ -85,7 +84,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <ArticleContext.Provider value={this.state}>
         <SearchBar searchArticles={this.searchArticles} />
         <CategoryList fetchAricleIds={this.fetchAricleIds} />
         <SearchFilter />
@@ -96,7 +95,7 @@ class App extends Component {
             <div>Loading Articles!</div>
           )}
         </div>
-      </div>
+      </ArticleContext.Provider>
     );
   } // end of render method
 } // end of app class
