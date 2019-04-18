@@ -8,7 +8,7 @@ class ArticleList extends Component {
   static contextType = ArticleContext
 
   renderArticles = () => {
-    return this.props.articleList.map(articleObj => {
+    return this.context.map(articleObj => {
       return <ArticleCard key={articleObj.id} articleObj={articleObj} />;
     });
   };

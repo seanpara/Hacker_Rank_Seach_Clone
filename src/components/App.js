@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 
 import ArticleContext from "../ArticleContext"
 import SearchBar from "./SearchBar";
@@ -84,7 +85,7 @@ class App extends Component {
 
   render() {
     return (
-      <ArticleContext.Provider value={this.state}>
+      <ArticleContext.Provider value={this.manageArticleDisplay()}>
         <SearchBar searchArticles={this.searchArticles} />
         <CategoryList fetchAricleIds={this.fetchAricleIds} />
         <SearchFilter />
